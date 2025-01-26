@@ -1,0 +1,62 @@
+created:
+    - database/factories/UserFactory.php
+    - database/factories/EducationFactory.php
+    - database/factories/MaritalFactory.php
+    - database/factories/GadaFactory.php
+    - database/factories/PlacementLocationFactory.php
+    - database/factories/PlacementStatusFactory.php
+    - database/factories/PositionFactory.php
+    - database/factories/DataEmployeeFactory.php
+    - database/factories/PresenLogFactory.php
+    - database/factories/ShiftFactory.php
+    - database/factories/LogbookFactory.php
+    - database/factories/EmployeeLogbookFactory.php
+    - database/factories/EmployeePaidLeaveFactory.php
+    - database/factories/EmployeeLeaveOptionFactory.php
+    - database/factories/PlacementFactory.php
+    - database/migrations/2025_01_26_084632_create_users_table.php
+    - database/migrations/2025_01_26_084633_create_education_table.php
+    - database/migrations/2025_01_26_084634_create_maritals_table.php
+    - database/migrations/2025_01_26_084635_create_gadas_table.php
+    - database/migrations/2025_01_26_084636_create_placement_locations_table.php
+    - database/migrations/2025_01_26_084637_create_placement_statuses_table.php
+    - database/migrations/2025_01_26_084638_create_positions_table.php
+    - database/migrations/2025_01_26_084639_create_data_employees_table.php
+    - database/migrations/2025_01_26_084640_create_presen_logs_table.php
+    - database/migrations/2025_01_26_084641_create_shifts_table.php
+    - database/migrations/2025_01_26_084642_create_logbooks_table.php
+    - database/migrations/2025_01_26_084643_create_employee_logbooks_table.php
+    - database/migrations/2025_01_26_084644_create_employee_paid_leaves_table.php
+    - database/migrations/2025_01_26_084645_create_employee_leave_options_table.php
+    - database/migrations/2025_01_26_084646_create_placements_table.php
+    - app/Models/User.php
+    - app/Models/Education.php
+    - app/Models/Marital.php
+    - app/Models/Gada.php
+    - app/Models/PlacementLocation.php
+    - app/Models/PlacementStatus.php
+    - app/Models/Position.php
+    - app/Models/DataEmployee.php
+    - app/Models/PresenLog.php
+    - app/Models/Shift.php
+    - app/Models/Logbook.php
+    - app/Models/EmployeeLogbook.php
+    - app/Models/EmployeePaidLeave.php
+    - app/Models/EmployeeLeaveOption.php
+    - app/Models/Placement.php
+models:
+    User: { name: string, email: 'string unique', email_verified_at: 'timestamp nullable', password: string, approved_by_admin: 'boolean default:false', remember_token: 'string nullable', timestamps: timestamps, relationships: { hasMany: DataEmployee } }
+    Education: { name: string, code: 'string length:3', relationships: { hasMany: DataEmployee } }
+    Marital: { status: 'string length:25', code: 'string length:3', relationships: { hasMany: DataEmployee } }
+    Gada: { status: 'string length:25', code: 'string length:2', relationships: { hasMany: DataEmployee } }
+    PlacementLocation: { name: 'string length:100', address: 'string length:255', relationships: { hasMany: Placement } }
+    PlacementStatus: { status_name: 'string length:25', relationships: { hasMany: Placement } }
+    Position: { position_name: 'string length:50', relationships: { hasMany: Placement } }
+    DataEmployee: { user_id: 'foreign:users.id', education_id: 'foreign:educations.id', marital_id: 'foreign:maritals.id', gada_id: 'foreign:gadas.id', sex: 'enum:male,female', phone_number: 'string length:13', birthplace: 'string length:50', birth_date: date, address: 'string length:255', mother_name: 'string length:100', body_height: 'string length:3', body_weight: 'string length:3', kk_number: integer, ktp_number: integer, kta_number: 'string length:50', kta_reg_number: 'string length:50', bpjs_kes: 'string length:13', bpjs_ket: 'string length:11', pkwt_number: 'string length:50', npwp_number: 'integer nullable', ijazah_gada_number: 'integer nullable', relationships: { hasMany: 'Placement, PresenLog' } }
+    PresenLog: { employee_id: 'foreign:data_employees.id', date: date, time: time, latitude: 'string length:100', longitude: 'string length:100', status: 'enum:masuk,pulang' }
+    Shift: { name: 'string length:100', time_start: time, time_end: time, relationships: { hasMany: Placement } }
+    Logbook: { date: date, time: time, description: 'text nullable', relationships: { hasMany: EmployeeLogbook } }
+    EmployeeLogbook: { logbook_id: 'foreign:logbooks.id', placements_id: 'foreign:placements.id' }
+    EmployeePaidLeave: { placement_id: 'foreign:placements.id', date: date, time: time, option: 'foreign:employees_leave_option.id', reason: text, approved_by_admin: 'boolean nullable' }
+    EmployeeLeaveOption: { name: 'string length:100', relationships: { hasMany: EmployeePaidLeave } }
+    Placement: { employee_number: 'string length:10', employee_id: 'foreign:data_employees.id', location_id: 'foreign:placementlocations.id', position_id: 'foreign:positions.id', placement_status_id: 'foreign:placement_statuses.id', shift_id: 'foreign:shifts.id', placement_start: date, placement_end: date, relationships: { hasMany: 'EmployeeLogbook, EmployeePaidLeave' } }

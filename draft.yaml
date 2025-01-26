@@ -1,0 +1,121 @@
+models:
+  User:
+    name: string
+    email: string unique
+    email_verified_at: timestamp nullable
+    password: string
+    approved_by_admin: boolean default:false
+    remember_token: string nullable
+    timestamps: true
+    relationships:
+      hasMany: DataEmployee
+
+  Education:
+    name: string
+    code: string length:3
+    relationships:
+      hasMany: DataEmployee
+
+  Marital:
+    status: string length:25
+    code: string length:3
+    relationships:
+      hasMany: DataEmployee
+
+  Gada:
+    status: string length:25
+    code: string length:2
+    relationships:
+      hasMany: DataEmployee
+
+  PlacementLocation:
+    name: string length:100
+    address: string length:255
+    relationships:
+      hasMany: Placement
+
+  PlacementStatus:
+    status_name: string length:25
+    relationships:
+      hasMany: Placement
+
+  Position:
+    position_name: string length:50
+    relationships:
+      hasMany: Placement
+
+  DataEmployee:
+    user_id: foreign:users.id
+    education_id: foreign:educations.id
+    marital_id: foreign:maritals.id
+    gada_id: foreign:gadas.id
+    sex: enum:male,female
+    phone_number: string length:13
+    birthplace: string length:50
+    birth_date: date
+    address: string length:255
+    mother_name: string length:100
+    body_height: string length:3
+    body_weight: string length:3
+    kk_number: integer
+    ktp_number: integer
+    kta_number: string length:50
+    kta_reg_number: string length:50
+    bpjs_kes: string length:13
+    bpjs_ket: string length:11
+    pkwt_number: string length:50
+    npwp_number: integer nullable
+    ijazah_gada_number: integer nullable
+    relationships:
+      hasMany: Placement, PresenLog
+      
+  PresenLog:
+    employee_id: foreign:data_employees.id
+    date: date
+    time: time
+    latitude: string length:100
+    longitude: string length:100
+    status: enum:masuk,pulang
+
+  Shift:
+    name: string length:100
+    time_start: time
+    time_end: time
+    relationships:
+      hasMany: Placement
+
+  Logbook:
+    date: date
+    time: time
+    description: text nullable
+    relationships:
+      hasMany: EmployeeLogbook
+
+  EmployeeLogbook:
+    logbook_id: foreign:logbooks.id
+    placements_id: foreign:placements.id
+
+  EmployeePaidLeave:
+    placement_id: foreign:placements.id
+    date: date
+    time: time
+    option: foreign:employees_leave_option.id
+    reason: text
+    approved_by_admin: boolean nullable
+
+  EmployeeLeaveOption:
+    name: string length:100
+    relationships:
+      hasMany: EmployeePaidLeave
+
+  Placement:
+    employee_number: string length:10
+    employee_id: foreign:data_employees.id
+    location_id: foreign:placementlocations.id
+    position_id: foreign:positions.id
+    placement_status_id: foreign:placement_statuses.id
+    shift_id: foreign:shifts.id
+    placement_start: date
+    placement_end: date
+    relationships:
+      hasMany: EmployeeLogbook, EmployeePaidLeave
