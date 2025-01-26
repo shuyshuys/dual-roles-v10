@@ -5,12 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class Education extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -19,20 +17,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
-        'email_verified_at',
-        'password',
-        'approved_by_admin',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
+        'code',
     ];
 
     /**
@@ -42,8 +27,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'id' => 'integer',
-        'email_verified_at' => 'timestamp',
-        'approved_by_admin' => 'boolean',
     ];
 
     public function dataEmployees(): HasMany
